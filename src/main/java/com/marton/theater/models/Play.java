@@ -1,7 +1,5 @@
 package com.marton.theater.models;
 
-import java.util.Map;
-
 import com.google.gson.JsonObject;
 
 public abstract class Play {
@@ -12,28 +10,24 @@ public abstract class Play {
 	}
 
 	// factory method - separate factory class needed?
-	public static Play createFromJson(String playID, JsonObject playData, Map<String, Play> cache) {
-		if (cache.containsKey(playID)) {
-			return cache.get(playID);
+	// Violates Single Responsibility (Play now knows about JSON parsing)
+	public static Play createFromJson(String playID, JsonObject playData) {
+
+		if (playData == null) {
+			throw new IllegalArgumentException("Play data required for " + playID);
 		}
 
 		String type = playData.get("type").getAsString();
 		String name = playData.get("name").getAsString();
 
-		Play play;
 		switch (type) {
 		case "tragedy":
-			play = new Tragedy(name);
-			break;
+			return new Tragedy(name);
 		case "comedy":
-			play = new Comedy(name);
-			break;
+			return new Comedy(name);
 		default:
 			throw new IllegalArgumentException("Unknown play type: " + type);
 		}
-
-		cache.put(playID, play);
-		return play;
 	}
 
 	public abstract int amount(int audience);
