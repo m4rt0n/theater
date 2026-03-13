@@ -1,10 +1,14 @@
 package com.marton.theater.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.marton.theater.exceptions.InvalidPerformanceException;
+import com.marton.theater.exceptions.InvalidPlayDataException;
 
 public class Invoice {
 	public final String customer;
@@ -16,15 +20,18 @@ public class Invoice {
 	}
 
 	// STATIC FACTORY METHOD - creates Invoice from raw JSON
-	public static Invoice fromJson(JsonObject rawInvoice, Map<String, JsonObject> rawPlays) {
+	public static Invoice createFromJson(JsonObject rawInvoice, Map<String, JsonObject> rawPlays)
+			throws InvalidPerformanceException, InvalidPlayDataException {
 		String customer = rawInvoice.get("customer").getAsString();
+		JsonArray performancesArray = rawInvoice.getAsJsonArray("performances");
 
-		List<Performance> performances = rawInvoice.getAsJsonArray("performances").asList().stream().map(rawPerf -> {
-			JsonObject perfData = rawPerf.getAsJsonObject();
+		List<Performance> performances = new ArrayList<>();
+		for (JsonElement element : performancesArray) { // Type-safe iteration
+			JsonObject perfData = element.getAsJsonObject();
 			String playID = perfData.get("playID").getAsString();
 			int audience = perfData.get("audience").getAsInt();
-			return new Performance(playID, audience, rawPlays); // Uses Play.fromJson()
-		}).collect(Collectors.toList());
+			performances.add(new Performance(playID, audience, rawPlays));
+		}
 
 		return new Invoice(customer, performances);
 	}

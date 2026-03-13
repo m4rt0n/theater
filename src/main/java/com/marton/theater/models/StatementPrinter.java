@@ -5,14 +5,15 @@ import java.util.stream.Collectors;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.marton.theater.exceptions.InvalidPerformanceException;
 
 public class StatementPrinter {
 
-	public String print(JsonArray rawInvoices, JsonObject rawPlays) {
+	public String print(JsonArray rawInvoices, JsonObject rawPlays) throws InvalidPerformanceException {
 		// Parse first (and only) invoice from array
 		JsonObject rawInvoice = rawInvoices.get(0).getAsJsonObject();
 		Map<String, JsonObject> plays = parsePlays(rawPlays);
-		Invoice invoice = Invoice.fromJson(rawInvoice, plays);
+		Invoice invoice = Invoice.createFromJson(rawInvoice, plays);
 
 		return format(invoice);
 	}

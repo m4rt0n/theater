@@ -1,6 +1,11 @@
 package com.marton.theater.models;
 
+import java.util.Optional;
+
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.marton.theater.exceptions.InvalidPlayDataException;
+import com.marton.theater.exceptions.InvalidPlayTypeException;
 
 public abstract class Play {
 	public final String name;
@@ -11,23 +16,16 @@ public abstract class Play {
 
 	// factory method - separate factory class needed?
 	// Violates Single Responsibility (Play now knows about JSON parsing)
-	public static Play createFromJson(String playID, JsonObject playData) {
-
+	public static Play createFromJson(String playID, JsonObject playData) throws InvalidPlayDataException {
 		if (playData == null) {
-			throw new IllegalArgumentException("Play data required for " + playID);
+			throw new InvalidPlayDataException(playID, "Play data is null");
 		}
 
-		String type = playData.get("type").getAsString();
-		String name = playData.get("name").getAsString();
-
-		switch (type) {
-		case "tragedy":
-			return new Tragedy(name);
-		case "comedy":
-			return new Comedy(name);
-		default:
-			throw new IllegalArgumentException("Unknown play type: " + type);
-		}
+		return Optional.ofNullable(playData.get("type")).map(JsonElement::getAsString).map(type -> switch (type) {
+		case "tragedy" -> new Tragedy(playData.get("name").getAsString());
+		case "comedy" -> new Comedy(playData.get("name").getAsString());
+		default -> throw new InvalidPlayTypeException(type);
+		}).orElseThrow(() -> new InvalidPlayDataException(playID, "Missing 'type' field"));
 	}
 
 	public abstract int amount(int audience);
