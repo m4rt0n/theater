@@ -10,6 +10,9 @@ import com.google.gson.JsonObject;
 import com.marton.theater.exceptions.InvalidPerformanceException;
 import com.marton.theater.exceptions.InvalidPlayDataException;
 
+/**
+ * Customer invoice containing multiple performances with totals.
+ */
 public class Invoice {
 	public final String customer;
 	public final List<Performance> performances;
@@ -36,22 +39,29 @@ public class Invoice {
 		return new Invoice(customer, performances);
 	}
 
-	// Total amount owed across all performances
+	/**
+	 * Returns total amount owed across all performances in this invoice.
+	 * 
+	 * @return total charge in cents
+	 */
 	public int totalAmount() {
 		return performances.stream().mapToInt(Performance::amount).sum();
 	}
 
-	// Total volume credits across all performances
+	/**
+	 * Returns total volume credits across all performances.
+	 * 
+	 * @return total loyalty credits earned
+	 */
 	public int totalCredits() {
 		return performances.stream().mapToInt(Performance::credits).sum();
 	}
 
-	// Convenience for statement formatting
 	public String formatHeader() {
 		return "Statement for " + customer + "\n";
 	}
 
 	public String formatFooter() {
-		return String.format("Amount owed is $%d.00\n", totalAmount() / 100);
+		return String.format("Amount owed is %s\n", Play.dollars(totalAmount()));
 	}
 }

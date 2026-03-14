@@ -7,6 +7,9 @@ import com.google.gson.JsonObject;
 import com.marton.theater.exceptions.InvalidPlayDataException;
 import com.marton.theater.exceptions.InvalidPlayTypeException;
 
+/**
+ * Abstract base for theatrical plays. Defines pricing contract.
+ */
 public abstract class Play {
 	public final String name;
 
@@ -14,10 +17,14 @@ public abstract class Play {
 		this.name = name;
 	}
 
-	// factory method - separate factory class needed?
-	// Violates Single Responsibility (Play now knows about JSON parsing)
-	// type exists only at JSON parsing time (factory).
-	// After that, inheritance makes it redundant
+	/**
+	 * Factory method creates Play instance from raw JSON play data.
+	 * 
+	 * @param playID   unique identifier ("hamlet", "as-like")
+	 * @param playData JSON object containing "name" and "type" fields
+	 * @return concrete Play subclass (Tragedy or Comedy)
+	 * @throws InvalidPlayDataException if JSON malformed or type unknown
+	 */
 	public static Play createFromJson(String playID, JsonObject playData) throws InvalidPlayDataException {
 		if (playData == null) {
 			throw new InvalidPlayDataException(playID, "Play data is null");
@@ -30,11 +37,35 @@ public abstract class Play {
 		}).orElseThrow(() -> new InvalidPlayDataException(playID, "Missing 'type' field"));
 	}
 
+	/**
+	 * Returns the charge for this play given the audience size (in cents).
+	 * 
+	 * <p>
+	 * Tragedies charge $400 base + $10 per seat over 30. Comedies charge $300 base
+	 * + $100 flat + $5 per seat over 20 + $3 per seat always.
+	 * 
+	 * @param audience number of seats sold (0-100 typical)
+	 * @return total charge in cents
+	 */
 	public abstract int amount(int audience);
 
+	/**
+	 * Calculates volume credits for this play given audience size.
+	 * 
+	 * <p>
+	 * Standard volume credits: 1 credit per seat over 30. Comedies receive bonus: 1
+	 * extra credit per 5 seats sold.
+	 * 
+	 * @param audience number of seats sold
+	 * @return total loyalty credits earned
+	 */
 	public abstract int credits(int audience);
 
-	public String formatAmount(int amount) {
-		return String.format("$%d.00", amount / 100);
+	public String formatAmount(int cents) {
+		return dollars(cents);
+	}
+
+	public static String dollars(int cents) {
+		return String.format("$%d.00", cents / 100);
 	}
 }
