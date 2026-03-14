@@ -1,6 +1,7 @@
 package com.marton.theater;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 
 import com.google.gson.JsonArray;
@@ -20,12 +21,11 @@ public class TheaterMainApp {
 			String result = printer.print(rawInvoices, rawPlays);
 			System.out.println(result);
 
+		} catch (IOException e) {
+			System.err.println("File error (" + e.getClass().getSimpleName() + "): " + e.getMessage());
+			System.exit(1);
 		} catch (TheaterException e) {
 			System.err.println("Theater billing error: " + e.getMessage());
-			System.exit(1);
-		} catch (Exception e) {
-			System.err.println("Unexpected error: " + e.getMessage());
-			e.printStackTrace();
 			System.exit(1);
 		}
 	}

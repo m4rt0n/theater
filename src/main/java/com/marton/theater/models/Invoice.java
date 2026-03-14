@@ -26,7 +26,7 @@ public class Invoice {
 		JsonArray performancesArray = rawInvoice.getAsJsonArray("performances");
 
 		List<Performance> performances = new ArrayList<>();
-		for (JsonElement element : performancesArray) { // Type-safe iteration
+		for (JsonElement element : performancesArray) {
 			JsonObject perfData = element.getAsJsonObject();
 			String playID = perfData.get("playID").getAsString();
 			int audience = perfData.get("audience").getAsInt();

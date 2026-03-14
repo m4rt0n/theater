@@ -13,12 +13,13 @@ public class Comedy extends Play {
 		if (audience > 20) {
 			result += 10000 + 500 * (audience - 20);
 		}
-		result += 300 * audience; // $0.50/seat surcharge
+		result += 300 * audience; // $0.50/seat bonus
 		return result;
 	}
 
 	@Override
 	public int credits(int audience) {
+		// Volume credits + comedy bonus (1 per 5 seats)
 		return Math.max(audience - 30, 0) + (int) Math.floor(audience / 5.0);
 	}
 

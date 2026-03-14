@@ -10,7 +10,6 @@ public class Performance {
 
 	public final Play play;
 	public final int audience;
-	public final String playID;
 
 	public Performance(String playID, int audience, Map<String, JsonObject> rawPlays)
 			throws InvalidPerformanceException, InvalidPlayDataException {
@@ -24,7 +23,6 @@ public class Performance {
 			throw new InvalidPerformanceException("Unknown playID: " + playID);
 		}
 
-		this.playID = playID; // ← NOW COMPILER HAPPY
 		this.audience = audience;
 		this.play = Play.createFromJson(playID, rawPlays.get(playID));
 	}
