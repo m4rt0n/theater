@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.marton.theater.models.StatementPrinter;
+import com.marton.theater.billing.StatementPrinter;
 
 class StatementPrinterTest {
 

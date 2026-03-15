@@ -1,4 +1,4 @@
-package com.marton.theater.models;
+package com.marton.theater.domain;
 
 public class Tragedy extends Play {
 

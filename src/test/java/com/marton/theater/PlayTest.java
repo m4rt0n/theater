@@ -7,11 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
+import com.marton.theater.domain.Comedy;
+import com.marton.theater.domain.Play;
+import com.marton.theater.domain.Tragedy;
 import com.marton.theater.exceptions.InvalidPlayDataException;
 import com.marton.theater.exceptions.InvalidPlayTypeException;
-import com.marton.theater.models.Comedy;
-import com.marton.theater.models.Play;
-import com.marton.theater.models.Tragedy;
 
 class PlayTest {
 

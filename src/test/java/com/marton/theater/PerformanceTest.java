@@ -15,8 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.google.gson.JsonObject;
+import com.marton.theater.domain.Performance;
 import com.marton.theater.exceptions.InvalidPerformanceException;
-import com.marton.theater.models.Performance;
 
 @ExtendWith(MockitoExtension.class)
 class PerformanceTest {

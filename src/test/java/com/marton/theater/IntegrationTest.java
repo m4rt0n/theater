@@ -13,8 +13,8 @@ import org.junit.jupiter.api.io.TempDir;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.marton.theater.models.StatementPrinter;
-import com.marton.theater.utils.JsonLoader;
+import com.marton.theater.billing.StatementPrinter;
+import com.marton.theater.infrastructure.JsonLoader;
 
 public class IntegrationTest {
 	@TempDir

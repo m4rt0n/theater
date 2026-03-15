@@ -1,4 +1,4 @@
-package com.marton.theater.models;
+package com.marton.theater.domain;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import com.marton.theater.exceptions.InvalidPerformanceException;
 import com.marton.theater.exceptions.InvalidPlayDataException;
 
 /**
- * Single play performance with audience count and Play reference.
+ * Single play performance with audience count and Play reference by ID.
  */
 public class Performance {
 
@@ -31,7 +31,7 @@ public class Performance {
 	}
 
 	/**
-	 * Returns the total charge for this performance (delegates to Play).
+	 * Total charge for this performance (delegates to Play).
 	 * 
 	 * @return charge in cents
 	 */
@@ -40,7 +40,7 @@ public class Performance {
 	}
 
 	/**
-	 * Returns volume credits for this performance (delegates to Play).
+	 * Volume credits for this performance (delegates to Play).
 	 * 
 	 * @return total loyalty credits
 	 */
@@ -49,7 +49,7 @@ public class Performance {
 	}
 
 	/**
-	 * Returns total amount owed across all performances in this invoice.
+	 * Total amount owed across all performances in this invoice.
 	 * 
 	 * @return total charge in cents
 	 */

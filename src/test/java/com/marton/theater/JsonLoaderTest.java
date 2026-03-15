@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.marton.theater.utils.JsonLoader;
+import com.marton.theater.infrastructure.JsonLoader;
 
 class JsonLoaderTest {
 

@@ -1,4 +1,4 @@
-package com.marton.theater.models;
+package com.marton.theater.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,8 @@ import com.marton.theater.exceptions.InvalidPerformanceException;
 import com.marton.theater.exceptions.InvalidPlayDataException;
 
 /**
- * Customer invoice containing multiple performances with totals.
+ * Customer invoice, contains customer name and multiple performances, total
+ * amounts and credits, utility header and footer formatter methods.
  */
 public class Invoice {
 	public final String customer;
@@ -22,7 +23,7 @@ public class Invoice {
 		this.performances = List.copyOf(performances); // Defensive copy
 	}
 
-	// Static Factory method - creates Invoice from raw JSON
+	// Static Factory method - creates Invoice from raw JSON.
 	public static Invoice fromJson(JsonObject rawInvoice, Map<String, JsonObject> rawPlays)
 			throws InvalidPerformanceException, InvalidPlayDataException {
 		String customer = rawInvoice.get("customer").getAsString();
@@ -40,7 +41,7 @@ public class Invoice {
 	}
 
 	/**
-	 * Returns total amount owed across all performances in this invoice.
+	 * Total amount owed across all performances in this invoice.
 	 * 
 	 * @return total charge in cents
 	 */
@@ -49,7 +50,7 @@ public class Invoice {
 	}
 
 	/**
-	 * Returns total volume credits across all performances.
+	 * Total volume credits across all performances in this invoice.
 	 * 
 	 * @return total loyalty credits earned
 	 */

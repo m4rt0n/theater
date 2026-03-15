@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.marton.theater.models.Invoice;
+import com.marton.theater.domain.Invoice;
 
 class InvoiceTest {
 	private Map<String, JsonObject> plays;

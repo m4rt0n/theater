@@ -1,4 +1,4 @@
-package com.marton.theater.models;
+package com.marton.theater.domain;
 
 import java.util.Optional;
 
@@ -8,7 +8,9 @@ import com.marton.theater.exceptions.InvalidPlayDataException;
 import com.marton.theater.exceptions.InvalidPlayTypeException;
 
 /**
- * Abstract base for theatrical plays. Defines pricing contract.
+ * Abstract base class for theatrical plays. Defines pricing (amount) and
+ * loyalty points (volume credits) calculation. Contains amount formatter
+ * (cents-to-dollars)
  */
 public abstract class Play {
 	public final String name;
@@ -18,12 +20,12 @@ public abstract class Play {
 	}
 
 	/**
-	 * Factory method creates Play instance from raw JSON play data.
+	 * Factory method, creates Play instance from raw JSON play data.
 	 * 
-	 * @param playID   unique identifier ("hamlet", "as-like")
-	 * @param playData JSON object containing "name" and "type" fields
-	 * @return concrete Play subclass (Tragedy or Comedy)
-	 * @throws InvalidPlayDataException if JSON malformed or type unknown
+	 * @param playID:   unique identifier e.g. ("hamlet", "as-like")
+	 * @param playData: JSON object, contains "name" and "type" fields
+	 * @return Play subclass (Tragedy or Comedy)
+	 * @throws InvalidPlayDataException (if JSON malformed or type unknown)
 	 */
 	public static Play createFromJson(String playID, JsonObject playData) throws InvalidPlayDataException {
 		if (playData == null) {
@@ -38,25 +40,25 @@ public abstract class Play {
 	}
 
 	/**
-	 * Returns the charge for this play given the audience size (in cents).
+	 * Calculates harge for this play by audience size (in cents).
 	 * 
 	 * <p>
 	 * Tragedies charge $400 base + $10 per seat over 30. Comedies charge $300 base
 	 * + $100 flat + $5 per seat over 20 + $3 per seat always.
 	 * 
-	 * @param audience number of seats sold (0-100 typical)
+	 * @param audience: number of seats sold
 	 * @return total charge in cents
 	 */
 	public abstract int calculateAmount(int audience);
 
 	/**
-	 * Calculates volume credits for this play given audience size.
+	 * Calculates volume credits for this play by audience size.
 	 * 
 	 * <p>
-	 * Standard volume credits: 1 credit per seat over 30. Comedies receive bonus: 1
-	 * extra credit per 5 seats sold.
+	 * Standard volume credits: 1 credit per seat over 30. Comedy bonus: 1 extra
+	 * credit per 5 seats sold.
 	 * 
-	 * @param audience number of seats sold
+	 * @param audience: number of seats sold
 	 * @return total loyalty credits earned
 	 */
 	public abstract int calculateVolumeCredits(int audience);

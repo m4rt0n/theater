@@ -1,23 +1,25 @@
-package com.marton.theater.models;
+package com.marton.theater.billing;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.marton.theater.domain.Invoice;
+import com.marton.theater.domain.Performance;
 import com.marton.theater.exceptions.InvalidPerformanceException;
 
 /**
- * Formats invoices into human-readable statements.
+ * Formats invoices into human-readable billing statements.
  */
 public class StatementPrinter {
 
 	/**
-	 * Generates statements for ALL invoices in the JSON array and JSON plays.
+	 * Generates statements for all invoices (JSON array) and plays (JSON).
 	 * 
-	 * @param rawInvoices array of invoice JSON objects
-	 * @param rawPlays    JSON object mapping playID to play details
-	 * @return complete formatted statement text
+	 * @param rawInvoices: array of invoice JSON objects
+	 * @param rawPlays:    JSON object, mapping playID to play details
+	 * @return formatted billing statement
 	 */
 	public String print(JsonArray rawInvoices, JsonObject rawPlays) throws InvalidPerformanceException {
 		Map<String, JsonObject> plays = parsePlays(rawPlays);
@@ -27,22 +29,22 @@ public class StatementPrinter {
 	}
 
 	/**
-	 * Normalizes raw plays JSON object into Map for O(1) lookup.
+	 * Converts raw plays (JSON object) into Map.
 	 * 
-	 * @param rawPlays JSON object with playID keys
-	 * @return Map<String, JsonObject> for playID → play data lookup
+	 * @param rawPlays: JSON object with playID keys
+	 * @return Map<String, JsonObject> playID for play data lookup
 	 */
 	private Map<String, JsonObject> parsePlays(JsonObject rawPlays) {
-		// Convert plays JSON to Map for easy lookup
 		return rawPlays.entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getAsJsonObject()));
 	}
 
 	/**
-	 * Formats complete invoice into final statement text.
+	 * Formats complete invoice into final billing statement text.
 	 * 
-	 * @param invoice fully-populated domain model invoice
-	 * @return formatted statement with header, performance lines, totals, credits
+	 * @param invoice: domain model invoice, populated
+	 * @return formatted statement with header, footer, performance lines, total
+	 *         amount, credits etc.
 	 */
 	private String format(Invoice invoice) {
 		StringBuilder result = new StringBuilder();
