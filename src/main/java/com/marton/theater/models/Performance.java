@@ -7,7 +7,7 @@ import com.marton.theater.exceptions.InvalidPerformanceException;
 import com.marton.theater.exceptions.InvalidPlayDataException;
 
 /**
- * Single play performance with audience count and resolved Play reference.
+ * Single play performance with audience count and Play reference.
  */
 public class Performance {
 

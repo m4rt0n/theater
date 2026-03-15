@@ -22,7 +22,7 @@ public class Invoice {
 		this.performances = List.copyOf(performances); // Defensive copy
 	}
 
-	// STATIC FACTORY METHOD - creates Invoice from raw JSON
+	// Static Factory method - creates Invoice from raw JSON
 	public static Invoice createFromJson(JsonObject rawInvoice, Map<String, JsonObject> rawPlays)
 			throws InvalidPerformanceException, InvalidPlayDataException {
 		String customer = rawInvoice.get("customer").getAsString();

@@ -66,6 +66,7 @@ public abstract class Play {
 	}
 
 	public static String dollars(int cents) {
-		return String.format("$%d.00", cents / 100);
+		int dollars = cents / 100;
+		return String.format("$%,d.00", dollars);
 	}
 }

@@ -14,8 +14,8 @@ public class TheaterMainApp {
 
 	public static void main(String[] args) throws Exception {
 		try {
-			JsonObject rawPlays = parsePlaysFile();
 			JsonArray rawInvoices = parseInvoicesFile();
+			JsonObject rawPlays = parsePlaysFile();
 
 			StatementPrinter printer = new StatementPrinter();
 			String result = printer.print(rawInvoices, rawPlays);
@@ -30,13 +30,14 @@ public class TheaterMainApp {
 		}
 	}
 
+	private static JsonArray parseInvoicesFile() throws Exception {
+		String invoicesJson = new String(Files.readAllBytes(new File("invoices.json").toPath()));
+		return JsonParser.parseString(invoicesJson).getAsJsonArray();
+	}
+
 	private static JsonObject parsePlaysFile() throws Exception {
 		String playsJson = new String(Files.readAllBytes(new File("plays.json").toPath()));
 		return JsonParser.parseString(playsJson).getAsJsonObject();
 	}
 
-	private static JsonArray parseInvoicesFile() throws Exception {
-		String invoicesJson = new String(Files.readAllBytes(new File("invoices.json").toPath()));
-		return JsonParser.parseString(invoicesJson).getAsJsonArray();
-	}
 }
