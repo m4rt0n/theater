@@ -8,7 +8,7 @@ public class Tragedy extends Play {
 
 	@Override
 	public int amount(int audience) {
-		// $30k base + $10k + $500/seat over 20 + $300/seat always.
+		// 30k base + 10k + 500/seat over 20 + 300/seat always.
 		int result = 40000;
 		if (audience > 30) {
 			result += 1000 * (audience - 30);

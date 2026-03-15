@@ -1,0 +1,4 @@
+[
+  {"customer": "BigCo", "performances": [{"playID": "hamlet", "audience": 55}]},
+  {"customer": "SecondCo", "performances": [{"playID": "as-like", "audience": 35}]}
+]

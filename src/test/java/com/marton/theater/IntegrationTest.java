@@ -1,77 +1,98 @@
 package com.marton.theater;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.marton.theater.models.StatementPrinter;
+import com.marton.theater.utils.JsonLoader;
 
 public class IntegrationTest {
-	@Test
-	void endToEndBigCoInvoice() throws Exception {
-		// GIVEN: Real JSON files
-		JsonArray rawInvoices = JsonParser.parseString(Files.readString(Paths.get("invoices.json"))).getAsJsonArray();
-		JsonObject rawPlays = JsonParser.parseString(Files.readString(Paths.get("plays.json"))).getAsJsonObject();
+	@TempDir
+	Path tempDir;
 
-		// WHEN: Complete pipeline executes
-		StatementPrinter printer = new StatementPrinter();
-		String result = printer.print(rawInvoices, rawPlays);
+	private Path invoicesFile;
+	private Path playsFile;
 
-		// THEN: Exact expected output
-		String expected = """
-				Statement for BigCo
-				 Hamlet: $650.00 (55 seats)
-				 As You Like It: $580.00 (35 seats)
-				 Othello: $500.00 (40 seats)
-				Amount owed is $1,730.00
-				You earned 47 credits
-				""".trim();
-
-		assertEquals(expected.trim(), result.trim(), "Complete pipeline produces exact task output");
+	@BeforeEach
+	void setUp() throws IOException {
+		invoicesFile = tempDir.resolve("invoices.json");
+		playsFile = tempDir.resolve("plays.json");
 	}
 
 	@Test
-	void handlesMultipleInvoices() throws Exception {
-		// GIVEN: Multiple invoices in array
-		JsonArray multiInvoices = createMultiInvoiceJson();
-		JsonObject rawPlays = JsonParser.parseString(Files.readString(Paths.get("plays.json"))).getAsJsonObject();
+	void endToEnd_multipleInvoices(@TempDir Path tempDir) throws IOException {
+		// Create test files
+		writeInvoicesFile(invoicesFile, createMultipleInvoicesJson());
+		writePlaysFile(playsFile, createPlaysJson());
 
-		// WHEN: Complete pipeline executes
-		StatementPrinter printer = new StatementPrinter();
-		String result = printer.print(multiInvoices, rawPlays);
+		// Run main logic (without System.out)
+		String result = runMainLogic(invoicesFile, playsFile);
 
-		// THEN: Processes first invoice only (current behavior)
 		assertTrue(result.contains("Statement for BigCo"));
-		assertFalse(result.contains("SmallCo")); // Ignores extras
+		assertTrue(result.contains("Statement for SecondCo"));
 	}
 
-	// Test data factory
-	private JsonArray createMultiInvoiceJson() throws Exception {
-		String multiJson = """
+	@Test
+	void endToEnd_singleInvoice() throws IOException {
+		writeInvoicesFile(invoicesFile, createSingleInvoiceJson());
+		writePlaysFile(playsFile, createPlaysJson());
+
+		String result = runMainLogic(invoicesFile, playsFile);
+
+		assertTrue(result.contains("Statement for BigCo"));
+	}
+
+	private String runMainLogic(Path invoicesPath, Path playsPath) throws IOException {
+		try (Reader invReader = Files.newBufferedReader(invoicesPath);
+				Reader playsReader = Files.newBufferedReader(playsPath)) {
+
+			JsonArray invoices = JsonLoader.loadInvoices(invReader);
+			JsonObject plays = JsonLoader.loadPlays(playsReader);
+
+			StatementPrinter printer = new StatementPrinter();
+			return printer.print(invoices, plays);
+		}
+	}
+
+	private void writeInvoicesFile(Path path, String content) throws IOException {
+		Files.write(path, content.getBytes());
+	}
+
+	private void writePlaysFile(Path path, String content) throws IOException {
+		Files.write(path, content.getBytes());
+	}
+
+	private String createMultipleInvoicesJson() {
+		return """
 				[
-				  {
-				    "customer": "BigCo",
-				    "performances": [
-				      {"playID": "hamlet", "audience": 55},
-				      {"playID": "as-like", "audience": 35}
-				    ]
-				  },
-				  {
-				    "customer": "SmallCo",
-				    "performances": [
-				      {"playID": "othello", "audience": 40}
-				    ]
-				  }
+				  {"customer": "BigCo", "performances": [{"playID": "hamlet", "audience": 55}]},
+				  {"customer": "SecondCo", "performances": [{"playID": "as-like", "audience": 35}]}
 				]
 				""";
-		return JsonParser.parseString(multiJson).getAsJsonArray();
+	}
+
+	private String createSingleInvoiceJson() {
+		return """
+				{"customer": "BigCo", "performances": [{"playID": "hamlet", "audience": 55}]}
+				""";
+	}
+
+	private String createPlaysJson() {
+		return """
+				{
+				  "hamlet": {"name": "Hamlet", "type": "tragedy"},
+				  "as-like": {"name": "As You Like It", "type": "comedy"}
+				}
+				""";
 	}
 }

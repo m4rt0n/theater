@@ -80,7 +80,7 @@ class PerformanceTest {
 		// Act & Assert
 		InvalidPerformanceException exception = assertThrows(InvalidPerformanceException.class,
 				() -> new Performance(null, 55, mockPlays));
-		assertEquals("playID is required", exception.getMessage());
+		assertEquals("Invalid performance: playID is required", exception.getMessage());
 	}
 
 	@Test
@@ -108,7 +108,7 @@ class PerformanceTest {
         InvalidPerformanceException exception = assertThrows(
             InvalidPerformanceException.class,
             () -> new Performance("unknown", 55, mockPlays));
-        assertEquals("Unknown playID: unknown", exception.getMessage());
+        assertEquals("Invalid performance: Unknown playID: unknown", exception.getMessage());
     }
 
 	@Test
