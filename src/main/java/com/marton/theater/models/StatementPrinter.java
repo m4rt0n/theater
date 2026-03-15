@@ -22,9 +22,8 @@ public class StatementPrinter {
 	public String print(JsonArray rawInvoices, JsonObject rawPlays) throws InvalidPerformanceException {
 		Map<String, JsonObject> plays = parsePlays(rawPlays);
 
-		return rawInvoices.asList().stream()
-				.map(invoiceJson -> Invoice.createFromJson(invoiceJson.getAsJsonObject(), plays)).map(this::format)
-				.collect(Collectors.joining("\n\n"));
+		return rawInvoices.asList().stream().map(invoiceJson -> Invoice.fromJson(invoiceJson.getAsJsonObject(), plays))
+				.map(this::format).collect(Collectors.joining("\n\n"));
 	}
 
 	/**

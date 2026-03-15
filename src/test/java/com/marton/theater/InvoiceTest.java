@@ -48,7 +48,7 @@ class InvoiceTest {
 	@Test
 	void fromJson_createsValidInvoice() {
 		JsonObject raw = createBigCoInvoice();
-		Invoice invoice = Invoice.createFromJson(raw, plays);
+		Invoice invoice = Invoice.fromJson(raw, plays);
 		assertEquals("BigCo", invoice.customer);
 	}
 }

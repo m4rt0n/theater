@@ -7,7 +7,7 @@ public class Tragedy extends Play {
 	}
 
 	@Override
-	public int amount(int audience) {
+	public int calculateAmount(int audience) {
 		// 30k base + 10k + 500/seat over 20 + 300/seat always.
 		int result = 40000;
 		if (audience > 30) {
@@ -17,7 +17,7 @@ public class Tragedy extends Play {
 	}
 
 	@Override
-	public int credits(int audience) {
+	public int calculateVolumeCredits(int audience) {
 		return Math.max(audience - 30, 0);
 	}
 

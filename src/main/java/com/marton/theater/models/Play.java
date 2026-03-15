@@ -47,7 +47,7 @@ public abstract class Play {
 	 * @param audience number of seats sold (0-100 typical)
 	 * @return total charge in cents
 	 */
-	public abstract int amount(int audience);
+	public abstract int calculateAmount(int audience);
 
 	/**
 	 * Calculates volume credits for this play given audience size.
@@ -59,7 +59,7 @@ public abstract class Play {
 	 * @param audience number of seats sold
 	 * @return total loyalty credits earned
 	 */
-	public abstract int credits(int audience);
+	public abstract int calculateVolumeCredits(int audience);
 
 	public String formatAmount(int cents) {
 		return dollars(cents);

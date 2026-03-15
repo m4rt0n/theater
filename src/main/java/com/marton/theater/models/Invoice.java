@@ -23,7 +23,7 @@ public class Invoice {
 	}
 
 	// Static Factory method - creates Invoice from raw JSON
-	public static Invoice createFromJson(JsonObject rawInvoice, Map<String, JsonObject> rawPlays)
+	public static Invoice fromJson(JsonObject rawInvoice, Map<String, JsonObject> rawPlays)
 			throws InvalidPerformanceException, InvalidPlayDataException {
 		String customer = rawInvoice.get("customer").getAsString();
 		JsonArray performancesArray = rawInvoice.getAsJsonArray("performances");
@@ -45,7 +45,7 @@ public class Invoice {
 	 * @return total charge in cents
 	 */
 	public int totalAmount() {
-		return performances.stream().mapToInt(Performance::amount).sum();
+		return performances.stream().mapToInt(Performance::calculateAmount).sum();
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class Invoice {
 	 * @return total loyalty credits earned
 	 */
 	public int totalCredits() {
-		return performances.stream().mapToInt(Performance::credits).sum();
+		return performances.stream().mapToInt(Performance::calculateVolumeCredits).sum();
 	}
 
 	public String formatHeader() {

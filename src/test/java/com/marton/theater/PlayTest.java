@@ -69,8 +69,8 @@ class PlayTest {
 
 		// Base: $400 × audience
 		// Over 30: + $10 per seat over 30 ($0.10 × 100 cents)
-		assertEquals(40000, hamlet.amount(30)); // $400 × 30 = $12,000 → 40000 cents
-		assertEquals(45000, hamlet.amount(35)); // $400 × 35 + $10 × 5 = $14,500 → 45000 cents
+		assertEquals(40000, hamlet.calculateAmount(30)); // $400 × 30 = $12,000 → 40000 cents
+		assertEquals(45000, hamlet.calculateAmount(35)); // $400 × 35 + $10 × 5 = $14,500 → 45000 cents
 	}
 
 	@Test
@@ -78,10 +78,10 @@ class PlayTest {
 		Play comedy = Play.createFromJson("as-like", createPlayJson("As You Like It", "comedy"));
 
 		// audience=20: $300×20 + $3×20 = $360 = 36,000 cents
-		assertEquals(36000, comedy.amount(20));
+		assertEquals(36000, comedy.calculateAmount(20));
 
 		// audience=25: $300×25 + $100 + $5×5 + $3×25 = $425 = 42,500 cents
-		assertEquals(50000, comedy.amount(25));
+		assertEquals(50000, comedy.calculateAmount(25));
 	}
 
 	@Test
@@ -89,8 +89,8 @@ class PlayTest {
 		Play hamlet = Play.createFromJson("hamlet", createPlayJson("Hamlet", "tragedy"));
 
 		// 1 credit per seat over 30
-		assertEquals(0, hamlet.credits(25));
-		assertEquals(25, hamlet.credits(55));
+		assertEquals(0, hamlet.calculateVolumeCredits(25));
+		assertEquals(25, hamlet.calculateVolumeCredits(55));
 	}
 
 	@Test
@@ -98,8 +98,8 @@ class PlayTest {
 		Play comedy = Play.createFromJson("as-like", createPlayJson("As You Like It", "comedy"));
 
 		// 1 per seat over 30 + 1 per 5 seats
-		assertEquals(5, comedy.credits(25)); // 0 over 30 + floor(25/5)
-		assertEquals(48, comedy.credits(65)); // 35 over 30 + floor(65/5)
+		assertEquals(5, comedy.calculateVolumeCredits(25)); // 0 over 30 + floor(25/5)
+		assertEquals(48, comedy.calculateVolumeCredits(65)); // 35 over 30 + floor(65/5)
 	}
 
 	@Test

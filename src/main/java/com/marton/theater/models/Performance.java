@@ -35,8 +35,8 @@ public class Performance {
 	 * 
 	 * @return charge in cents
 	 */
-	public int amount() {
-		return play.amount(audience);
+	public int calculateAmount() {
+		return play.calculateAmount(audience);
 	}
 
 	/**
@@ -44,8 +44,8 @@ public class Performance {
 	 * 
 	 * @return total loyalty credits
 	 */
-	public int credits() {
-		return play.credits(audience);
+	public int calculateVolumeCredits() {
+		return play.calculateVolumeCredits(audience);
 	}
 
 	/**
@@ -54,6 +54,6 @@ public class Performance {
 	 * @return total charge in cents
 	 */
 	public String formatLine() {
-		return String.format(" %s: %s (%d seats)", play.name, play.formatAmount(amount()), audience);
+		return String.format(" %s: %s (%d seats)", play.name, play.formatAmount(calculateAmount()), audience);
 	}
 }

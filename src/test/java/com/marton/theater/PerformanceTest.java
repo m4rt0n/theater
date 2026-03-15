@@ -44,7 +44,7 @@ class PerformanceTest {
         Performance perf = new Performance("hamlet", 55, mockPlays);
         
         // Assert
-        assertEquals(65000, perf.amount(), "Should delegate to TragedyPlay.amount(55)");
+        assertEquals(65000, perf.calculateAmount(), "Should delegate to TragedyPlay.amount(55)");
         verify(mockPlays).get("hamlet");  // Verifies Play.createFromJson called
     }
 
@@ -58,7 +58,7 @@ class PerformanceTest {
         Performance perf = new Performance("hamlet", 55, mockPlays);
         
         // Assert
-        assertEquals(25, perf.credits(), "Should delegate to TragedyPlay.credits(55)");
+        assertEquals(25, perf.calculateVolumeCredits(), "Should delegate to TragedyPlay.credits(55)");
     }
 
 	@Test
@@ -121,8 +121,8 @@ class PerformanceTest {
         Performance perf = new Performance("as-like", 35, mockPlays);
         
         // Assert
-        assertEquals(58000, perf.amount(), "Comedy 35 seats: $580");
-        assertEquals(12, perf.credits(), "Comedy credits: 5 + 7 bonus");
+        assertEquals(58000, perf.calculateAmount(), "Comedy 35 seats: $580");
+        assertEquals(12, perf.calculateVolumeCredits(), "Comedy credits: 5 + 7 bonus");
         assertEquals(" As You Like It: $580.00 (35 seats)", perf.formatLine());
     }
 
