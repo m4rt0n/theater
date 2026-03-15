@@ -13,18 +13,18 @@ import com.marton.theater.exceptions.InvalidPerformanceException;
 public class StatementPrinter {
 
 	/**
-	 * Generates complete statement text from raw JSON invoices and plays data.
+	 * Generates statements for ALL invoices in the JSON array and JSON plays.
 	 * 
-	 * @param rawInvoices array of invoice JSON objects (uses first only)
+	 * @param rawInvoices array of invoice JSON objects
 	 * @param rawPlays    JSON object mapping playID to play details
 	 * @return complete formatted statement text
 	 */
 	public String print(JsonArray rawInvoices, JsonObject rawPlays) throws InvalidPerformanceException {
-		JsonObject rawInvoice = rawInvoices.get(0).getAsJsonObject();
 		Map<String, JsonObject> plays = parsePlays(rawPlays);
-		Invoice invoice = Invoice.createFromJson(rawInvoice, plays);
 
-		return format(invoice);
+		return rawInvoices.asList().stream()
+				.map(invoiceJson -> Invoice.createFromJson(invoiceJson.getAsJsonObject(), plays)).map(this::format)
+				.collect(Collectors.joining("\n\n"));
 	}
 
 	/**

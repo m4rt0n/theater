@@ -1,25 +1,29 @@
 package com.marton.theater;
 
-import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.Reader;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.marton.theater.exceptions.TheaterException;
 import com.marton.theater.models.StatementPrinter;
+import com.marton.theater.utils.JsonLoader;
 
 public class TheaterMainApp {
 
 	public static void main(String[] args) throws Exception {
 		try {
-			JsonArray rawInvoices = parseInvoicesFile();
-			JsonObject rawPlays = parsePlaysFile();
+
+			Reader invoicesReader = new FileReader("invoices.json");
+			Reader playsReader = new FileReader("plays.json");
+
+			JsonArray rawInvoices = JsonLoader.loadInvoices(invoicesReader);
+			JsonObject rawPlays = JsonLoader.loadPlays(playsReader);
 
 			StatementPrinter printer = new StatementPrinter();
-			String result = printer.print(rawInvoices, rawPlays);
-			System.out.println(result);
+			String statements = printer.print(rawInvoices, rawPlays);
+			System.out.println(statements);
 
 		} catch (IOException e) {
 			System.err.println("File error (" + e.getClass().getSimpleName() + "): " + e.getMessage());
@@ -28,16 +32,6 @@ public class TheaterMainApp {
 			System.err.println("Theater billing error: " + e.getMessage());
 			System.exit(1);
 		}
-	}
-
-	private static JsonArray parseInvoicesFile() throws Exception {
-		String invoicesJson = new String(Files.readAllBytes(new File("invoices.json").toPath()));
-		return JsonParser.parseString(invoicesJson).getAsJsonArray();
-	}
-
-	private static JsonObject parsePlaysFile() throws Exception {
-		String playsJson = new String(Files.readAllBytes(new File("plays.json").toPath()));
-		return JsonParser.parseString(playsJson).getAsJsonObject();
 	}
 
 }
