@@ -17,13 +17,10 @@ class PlayTest {
 
 	@Test
 	void createFromJson_tragedy() {
-		// Arrange
 		JsonObject playData = createPlayJson("Hamlet", "tragedy");
 
-		// Act
 		Play hamlet = Play.createFromJson("hamlet", playData);
 
-		// Assert
 		assertEquals("Hamlet", hamlet.name);
 		assertInstanceOf(Tragedy.class, hamlet);
 	}

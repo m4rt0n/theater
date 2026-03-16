@@ -16,11 +16,9 @@ class InvoiceTest {
 
 	@BeforeEach
 	void setUp() {
-		plays = Map.of("hamlet", createPlay("Hamlet", "tragedy"), // ← Define this method
-				"as-like", createPlay("As You Like It", "comedy"));
+		plays = Map.of("hamlet", createPlay("Hamlet", "tragedy"), "as-like", createPlay("As You Like It", "comedy"));
 	}
 
-	// ✅ ADD THIS METHOD
 	private JsonObject createPlay(String name, String type) {
 		JsonObject play = new JsonObject();
 		play.addProperty("name", name);
@@ -28,7 +26,6 @@ class InvoiceTest {
 		return play;
 	}
 
-	// Also need createBigCoInvoice()
 	private JsonObject createBigCoInvoice() {
 		JsonObject invoice = new JsonObject();
 		invoice.addProperty("customer", "BigCo");
